@@ -1,0 +1,19 @@
+{
+  "name": "virtual-rdw-node",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["modbus", "tcp", "simulator", "holding-registers", "industrial"],
+  "author": "",
+  "license": "ISC",
+  "description": "Generador de datos Modbus TCP con interfaz web para 14 holding registers",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "modbus-serial": "^8.0.21-no-serial-port"
+  }
+}

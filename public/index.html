@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación virtual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #2d2d2d;
+            --accent-color: #007acc;
+            --success-color: #00c851;
+            --warning-color: #ff8800;
+            --danger-color: #dc3545;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #6c757d;
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.025em;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .section {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 12px 24px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-success { background: var(--success-color); }
+        .btn-warning { background: var(--warning-color); }
+        .btn-danger { background: var(--danger-color); }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .status-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-active { color: var(--success-color); }
+        .status-warning { color: var(--warning-color); }
+        .status-error { color: var(--danger-color); }
+
+        /* Tabla de Registros */
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Controles industriales */
+        .control-group {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .control-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .switch-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .switch-control:last-child {
+            border-bottom: none;
+        }
+
+        .switch-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .switch.active {
+            background: var(--success-color);
+        }
+
+        .switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .switch.active::before {
+            transform: translateX(26px);
+        }
+
+        .switch-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            min-width: 32px;
+        }
+
+        .status-on { color: var(--success-color); }
+        .status-off { color: var(--text-muted); }
+
+        /* Slider para nivel de agua */
+        .slider-control {
+            padding: 20px 0;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .slider-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            outline: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Datos PM2120 */
+        .pm2120-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            max-height: 800px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .pm2120-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .pm2120-grid::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        .pm2120-grid::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .pm2120-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        .pm2120-register {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pm2120-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .pm2120-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .pm2120-unit {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+        
+        .pm2120-datatype {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        
+        .pm2120-grid h3 {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .pm2120-grid h4 {
+            grid-column: 1 / -1;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mensajes */
+        .message {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin: 8px 0;
+            font-size: 0.875rem;
+        }
+
+        .message.success {
+            background: rgba(0, 200, 81, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 0 10px; }
+            .header h1 { font-size: 2rem; }
+            .section { padding: 16px; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .pm2120-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Estación virtual</h1>
+            <div class="subtitle">Generador de Datos Modbus TCP</div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    Configuración del Servidor
+                    <div class="section-badge">Modbus TCP</div>
+                </div>
+            </div>
+            <form id="configForm">
+                <div class="grid grid-4">
+                    <div class="form-group">
+                        <label class="form-label">Device ID</label>
+                        <input type="number" id="deviceId" name="deviceId" class="form-input" value="1" min="1" max="255">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Intervalo (segundos)</label>
+                        <input type="number" id="interval" name="interval" class="form-input" value="60" min="1" max="3600">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Puerto Modbus</label>
+                        <input type="number" id="modbusPort" name="modbusPort" class="form-input" value="502" min="1" max="65535">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">IP del Servidor</label>
+                        <input type="text" id="modbusIp" name="modbusIp" class="form-input" value="0.0.0.0">
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 20px;">Aplicar Configuración</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    Estado del Sistema
+                    <div class="section-badge">En Vivo</div>
+                </div>
+            </div>
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-label">Estado del Servidor</div>
+                    <div class="status-value status-active" id="serverStatus">Iniciando...</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Última Actualización</div>
+                    <div class="status-value" id="lastUpdate">--:--:--</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Parámetros PM2120</div>
+                    <div class="status-value" id="pm2120Count">76</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Total de Registros</div>
+                    <div class="status-value" id="totalRegisters">--</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Próxima Actualización</div>
+                    <div class="status-value" id="nextUpdate">--</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Intervalo Configurado</div>
+                    <div class="status-value" id="configuredInterval">60s</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    Controles Industriales
+                    <div class="section-badge">4000-4002</div>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div class="control-group">
+                    <div class="control-header">
+                        Sistema de Bombas de Agua
+                    </div>
+                    <form id="pumpForm">
+                        <div class="switch-control">
+                            <span class="switch-label">Bomba 1 (4000)</span>
+                            <div class="switch-wrapper">
+                                <div class="switch" id="pump1Switch">
+                                    <input type="checkbox" id="pump1" name="pump1" style="display: none;">
+                                </div>
+                                <span class="switch-status status-off" id="pump1Status">OFF</span>
+                            </div>
+                        </div>
+                        <div class="switch-control">
+                            <span class="switch-label">Bomba 2 (4001)</span>
+                            <div class="switch-wrapper">
+                                <div class="switch" id="pump2Switch">
+                                    <input type="checkbox" id="pump2" name="pump2" style="display: none;">
+                                </div>
+                                <span class="switch-status status-off" id="pump2Status">OFF</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success" style="margin-top: 20px;">Actualizar Bombas</button>
+                    </form>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        Nivel del Estanque de Agua
+                    </div>
+                    <form id="waterLevelForm">
+                        <div class="slider-control">
+                            <div class="slider-header">
+                                <span class="slider-label">Nivel (4002)</span>
+                                <div class="slider-value"><span id="waterLevelValue">50</span>%</div>
+                            </div>
+                            <input type="range" id="waterLevel" name="waterLevel" class="slider" min="0" max="100" value="50">
+                        </div>
+                        <button type="submit" class="btn btn-warning" style="margin-top: 20px;">Actualizar Nivel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    Datos del Medidor PM2120 (Muestra)
+                    <div class="section-badge">3000-3716</div>
+                </div>
+            </div>
+            
+            <div class="pm2120-grid" id="pm2120Display">
+                </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    Tabla de Registros PM2120
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Registro</th>
+                            <th>Nombre</th>
+                            <th>Valor</th>
+                            <th>Unidad</th>
+                            <th>Tipo de dato</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registerTableBody">
+                        <!-- Los datos se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        let updateInterval;
+        let nextUpdateCountdown;
+        let currentConfig = {};
+        let registerList = []; // <-- Almacenar la lista de registros estática
+
+        // Función para mostrar mensajes
+        function showMessage(message, type = 'success') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        // Función para actualizar la tabla de registros
+        function updateRegisterTable(realtimeData) {
+            const dataMap = new Map(realtimeData.map(item => [item.address, item]));
+            const tableBody = document.getElementById('registerTableBody');
+            tableBody.innerHTML = '';
+
+            registerList.forEach(item => {
+                const dataItem = dataMap.get(item.address);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.address}</td>
+                    <td>${item.description}</td>
+                    <td>${dataItem ? dataItem.displayValue : '--'}</td>
+                    <td>${dataItem ? (dataItem.unit || '') : (item.unit || '--')}</td>
+                    <td>${item.dataType}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para actualizar la visualización de datos del PM2120
+        function updatePM2120Display(data) {
+            const container = document.getElementById('pm2120Display');
+            container.innerHTML = '';
+
+            const groups = {
+                "1s Metering (50/60 Cycles)": {
+                    "Current": [3000, 3002, 3004, 3006, 3008, 3010],
+                    "Current Unbalance": [3012, 3014, 3016, 3018],
+                    "Voltage": [3020, 3022, 3024, 3026, 3028, 3030, 3032, 3036],
+                    "Voltage Unbalance": [3038, 3040, 3042, 3044, 3046, 3048, 3050, 3052],
+                    "Power": [3054, 3056, 3058, 3060, 3062, 3064, 3066, 3068, 3070, 3072, 3074, 3076],
+                    "Power Factor": [3078, 3080, 3082, 3084, 3086, 3088, 3090, 3092],
+                    "Frequency": [3110],
+                    "Power Factor, Alternate Format": [3192, 3194, 3196, 3197]
+                },
+                "Energy": {
+                    "Accumulated Energy": [3200, 3204, 3208, 3212, 3216, 3220, 3224, 3228, 3232, 3236, 3240, 3244, 3248]
+                },
+                "Demand": {
+                    "Demand System 1 (Power)": [3701, 3702, 3703, 3704, 3705, 3706],
+                    "Demand System 2 (Current)": [3711, 3712, 3713, 3714, 3715, 3716]
+                }
+            };
+
+            const groupedData = {};
+
+            data.forEach(item => {
+                for (const mainGroup in groups) {
+                    for (const subGroup in groups[mainGroup]) {
+                        if (groups[mainGroup][subGroup].includes(item.address)) {
+                            if (!groupedData[mainGroup]) {
+                                groupedData[mainGroup] = {};
+                            }
+                            if (!groupedData[mainGroup][subGroup]) {
+                                groupedData[mainGroup][subGroup] = [];
+                            }
+                            groupedData[mainGroup][subGroup].push(item);
+                        }
+                    }
+                }
+            });
+
+            for (const mainGroup in groupedData) {
+                const mainGroupTitle = document.createElement('h3');
+                mainGroupTitle.textContent = mainGroup;
+                container.appendChild(mainGroupTitle);
+
+                for (const subGroup in groupedData[mainGroup]) {
+                    const subGroupTitle = document.createElement('h4');
+                    subGroupTitle.textContent = subGroup;
+                    container.appendChild(subGroupTitle);
+
+                    groupedData[mainGroup][subGroup].forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'pm2120-item';
+                        
+                        itemDiv.innerHTML = `
+                            <div class="pm2120-register">${item.address}</div>
+                            <div class="pm2120-title">${item.description}</div>
+                            <div class="pm2120-value">
+                                ${item.displayValue}
+                                <span class="pm2120-unit">${item.unit || ''}</span>
+                            </div>
+                            <div class="pm2120-datatype">${item.dataType}</div>
+                        `;
+                        container.appendChild(itemDiv);
+                    });
+                }
+            }
+            
+            const countElement = document.getElementById('pm2120Count');
+            if (countElement) {
+                countElement.textContent = data.length;
+            }
+        }
+
+        // Función para cargar datos del PM2120 y actualizar la UI
+        async function loadPM2120Data() {
+            try {
+                const response = await fetch('/api/pm2120');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                if (result.success) {
+                    updatePM2120Display(result.data);
+                    updateRegisterTable(result.data); // <-- Actualizar la tabla
+                }
+            } catch (error) {
+                console.error('[CLIENT] Error cargando datos PM2120:', error);
+            }
+        }
+
+        // Función para cargar la configuración actual
+        async function loadConfig() {
+            try {
+                console.log('[CLIENT] Cargando configuración...');
+                const response = await fetch('/api/config');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('[CLIENT] Configuración recibida:', data);
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                currentConfig = data;
+                
+                document.getElementById('deviceId').value = data.deviceId || 1;
+                document.getElementById('interval').value = data.interval || 60;
+                document.getElementById('modbusPort').value = data.modbusPort || 502;
+                document.getElementById('modbusIp').value = data.modbusIp || '0.0.0.0';
+                
+                const serverStatus = document.getElementById('serverStatus');
+                serverStatus.textContent = 'Activo';
+                serverStatus.className = 'status-value status-active';
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                document.getElementById('totalRegisters').textContent = data.registers?.length || 0;
+                document.getElementById('configuredInterval').textContent = `${data.interval || 60}s`;
+                
+                startCountdown(data.interval || 60);
+                
+                await loadControls();
+                
+                // Cargar la lista de registros si aún no se ha cargado
+                if (registerList.length === 0) {
+                    const tableResponse = await fetch('/api/registers/table');
+                    if (tableResponse.ok) {
+                        registerList = await tableResponse.json();
+                    }
+                }
+
+                await loadPM2120Data();
+                
+                console.log('[CLIENT] Configuración cargada exitosamente');
+                
+            } catch (error) {
+                console.error('[CLIENT] Error cargando configuración:', error);
+                showMessage(`Error de configuración: ${error.message}`, 'error');
+                
+                const serverStatus = document.getElementById('serverStatus');
+                serverStatus.textContent = 'Error';
+                serverStatus.className = 'status-value status-error';
+                
+                document.getElementById('lastUpdate').textContent = 'Error';
+                
+                setTimeout(() => {
+                    console.log('[CLIENT] Reintentando cargar configuración...');
+                    loadConfig();
+                }, 5000);
+            }
+        }
+
+        // Función para cargar estados de controles
+        async function loadControls() {
+            try {
+                const response = await fetch('/api/registers');
+                if (!response.ok) return;
+                
+                const data = await response.json();
+                
+                if (data.controls) {
+                    updatePumpSwitch('pump1', data.controls.pump1.value === 1);
+                    updatePumpSwitch('pump2', data.controls.pump2.value === 1);
+                    
+                    document.getElementById('waterLevel').value = data.controls.waterLevel.value;
+                    document.getElementById('waterLevelValue').textContent = data.controls.waterLevel.value;
+                }
+            } catch (error) {
+                console.error('[CLIENT] Error cargando controles:', error);
+            }
+        }
+
+        function updatePumpSwitch(pumpId, isOn) {
+            const switchElement = document.getElementById(pumpId + 'Switch');
+            const statusElement = document.getElementById(pumpId + 'Status');
+            const checkbox = document.getElementById(pumpId);
+            
+            checkbox.checked = isOn;
+            
+            if (isOn) {
+                switchElement.classList.add('active');
+                statusElement.textContent = 'ON';
+                statusElement.className = 'switch-status status-on';
+            } else {
+                switchElement.classList.remove('active');
+                statusElement.textContent = 'OFF';
+                statusElement.className = 'switch-status status-off';
+            }
+        }
+
+        function startCountdown(interval) {
+            if (nextUpdateCountdown) clearInterval(nextUpdateCountdown);
+            
+            let seconds = interval;
+            const updateCountdown = () => {
+                document.getElementById('nextUpdate').textContent = `${seconds}s`;
+                seconds--;
+                if (seconds < 0) {
+                    seconds = interval;
+                    document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                    loadPM2120Data();
+                }
+            };
+            
+            updateCountdown();
+            nextUpdateCountdown = setInterval(updateCountdown, 1000);
+        }
+
+        document.getElementById('pump1Switch').addEventListener('click', () => {
+            const checkbox = document.getElementById('pump1');
+            checkbox.checked = !checkbox.checked;
+            updatePumpSwitch('pump1', checkbox.checked);
+        });
+
+        document.getElementById('pump2Switch').addEventListener('click', () => {
+            const checkbox = document.getElementById('pump2');
+            checkbox.checked = !checkbox.checked;
+            updatePumpSwitch('pump2', checkbox.checked);
+        });
+
+        document.getElementById('waterLevel').addEventListener('input', (e) => {
+            document.getElementById('waterLevelValue').textContent = e.target.value;
+        });
+
+        document.getElementById('configForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                console.log('[CLIENT] Enviando configuración...');
+                const formData = new FormData(e.target);
+                const config = Object.fromEntries(formData.entries());
+                
+                console.log('[CLIENT] Datos a enviar:', config);
+                
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                console.log('[CLIENT] Respuesta recibida:', result);
+                
+                if (result.success) {
+                    showMessage('Configuración actualizada correctamente');
+                    setTimeout(loadConfig, 2000);
+                } else {
+                    throw new Error(result.error || 'Error desconocido');
+                }
+            } catch (error) {
+                console.error('[CLIENT] Error actualizando configuración:', error);
+                showMessage(`Error de configuración: ${error.message}`, 'error');
+            }
+        });
+
+        document.getElementById('pumpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const pump1 = document.getElementById('pump1').checked;
+            const pump2 = document.getElementById('pump2').checked;
+            
+            try {
+                const response = await fetch('/api/registers/pumps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pump1, pump2 })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('Bombas actualizadas correctamente');
+                } else {
+                    throw new Error(result.error || 'Error actualizando bombas');
+                }
+            } catch (error) {
+                console.error('[CLIENT] Error actualizando bombas:', error);
+                showMessage(`Error de bombas: ${error.message}`, 'error');
+            }
+        });
+
+        document.getElementById('waterLevelForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const level = document.getElementById('waterLevel').value;
+            
+            try {
+                const response = await fetch('/api/registers/water-level', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('Nivel de agua actualizado correctamente');
+                } else {
+                    throw new Error(result.error || 'Error actualizando nivel de agua');
+                }
+            } catch (error) {
+                console.error('[CLIENT] Error actualizando nivel de agua:', error);
+                showMessage(`Error de nivel de agua: ${error.message}`, 'error');
+            }
+        });
+
+        setInterval(loadConfig, 10000);
+        setInterval(loadPM2120Data, 30000);
+
+        // Cargar configuración inicial
+        loadConfig();
+    </script>
+</body>
+</html>
